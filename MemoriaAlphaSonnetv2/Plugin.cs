@@ -60,7 +60,7 @@ public sealed class Plugin : IDalamudPlugin
 
         // NEW: Initialize TocService (loads toc.json eagerly)
         var pluginDirectory = PluginInterface.AssemblyLocation.Directory?.FullName!;
-        _tocService = new TocService(PlayerState, Log, pluginDirectory);
+        _tocService = new TocService(ClientState, Log, pluginDirectory);
         
         // NEW: Check highest completed MSQ milestone on plugin load
         var highestMilestone = _tocService.GetHighestCompletedMilestone();

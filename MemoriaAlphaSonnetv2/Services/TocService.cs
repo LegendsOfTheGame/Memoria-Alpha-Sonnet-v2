@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using Dalamud.Plugin.Services;
 using MemoriaAlphaSonnetv2.Models;
+using FFXIVClientStructs.FFXIV.Client.Game;  // For QuestManager
 
 namespace MemoriaAlphaSonnetv2.Services;
 
@@ -15,7 +16,7 @@ namespace MemoriaAlphaSonnetv2.Services;
 public class TocService
 {
     // Dalamud services injected via constructor
-    private readonly IPlayerState _playerState;  // For checking quest completion
+    private readonly IClientState _clientState;  // For checking if player is logged in
     private readonly IPluginLog _log;             // For logging
     private readonly string _tocFilePath;         // Path to toc.json
     
@@ -28,9 +29,9 @@ public class TocService
     // Data loaded once in constructor, immutable after that
     
     
-    public TocService(IPlayerState playerState, IPluginLog log, string pluginDirectory)
+    public TocService(IClientState clientState, IPluginLog log, string pluginDirectory)
     {
-        _playerState = playerState;
+        _clientState = clientState;
         _log = log;
         
         // Build path to toc.json (in same directory as plugin DLL)
@@ -88,13 +89,36 @@ public class TocService
     
     /// <summary>
     /// Checks if a specific quest ID is completed by the current character.
-    /// STUB: Returns false for now (Thread 2 scope - implement in Thread 3).
+    /// Uses FFXIVClientStructs QuestManager to read game memory safely.
     /// </summary>
+    /// <param name="questId">Quest ID from game data (e.g., 66133 for "Before the Dawn")</param>
+    /// <returns>True if quest is complete, false if incomplete or player not logged in</returns>
     public bool IsQuestComplete(int questId)
     {
-        // TODO (Thread 3): Use IQuestManager to check actual completion status
-        // For now, always return false so we can test the TOC loading logic
-        return false;
+        // SAFETY CHECK: Don't access QuestManager if player isn't logged in
+        // WHY: Game memory structures aren't initialized until character loads
+        // Accessing them early = crash or garbage data
+        if (!_clientState.IsLoggedIn)
+        {
+            return false;
+        }
+        
+        // TEACHING NOTE: Static method call (no instance needed)
+        // QuestManager.IsQuestComplete() is like Math.Sqrt() - call directly on class
+        // WHY static: FFXIVClientStructs treats many game systems as global singletons
+        // The game only has ONE quest manager, so no need for instance management
+        
+        // CORE LOGIC: Ask QuestManager if this specific quest is complete
+        // - IsQuestComplete() reads a bitfield in game memory
+        // - Each quest has a bit: 1 = complete, 0 = incomplete
+        // - Extremely fast (single memory read, ~5 nanoseconds)
+        return QuestManager.IsQuestComplete((uint)questId);
+        
+        // TEACHING MOMENT: Why cast to uint?
+        // - Our JSON stores quest IDs as signed integers (int)
+        // - FFXIV's internal quest IDs are unsigned (uint, 0 to 4 billion)
+        // - QuestManager expects uint, so we cast
+        // - Safe: All quest IDs are positive, no overflow risk
     }
     
     
