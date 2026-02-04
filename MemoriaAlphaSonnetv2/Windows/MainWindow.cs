@@ -10,8 +10,8 @@ namespace MemoriaAlphaSonnetv2.Windows;
 
 public class MainWindow : Window, IDisposable
 {
-    private readonly string goatImagePath;
-    private readonly Plugin plugin;
+    private readonly string _goatImagePath;
+    private readonly Plugin _plugin;
 
     // We give this window a hidden ID using ##.
     // The user will see "My Amazing Window" as window title,
@@ -25,19 +25,19 @@ public class MainWindow : Window, IDisposable
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
-        this.goatImagePath = goatImagePath;
-        this.plugin = plugin;
+        _goatImagePath = goatImagePath;
+        _plugin = plugin;
     }
 
     public void Dispose() { }
 
     public override void Draw()
     {
-        ImGui.Text($"The random config bool is {plugin.Configuration.SomePropertyToBeSavedAndWithADefault}");
+        ImGui.Text($"The random config bool is {_plugin.Configuration.SomePropertyToBeSavedAndWithADefault}");
 
         if (ImGui.Button("Show Settings"))
         {
-            plugin.ToggleConfigUi();
+            _plugin.ToggleConfigUi();
         }
 
         ImGui.Spacing();
@@ -51,7 +51,7 @@ public class MainWindow : Window, IDisposable
             if (child.Success)
             {
                 ImGui.Text("Have a goat:");
-                var goatImage = Plugin.TextureProvider.GetFromFile(goatImagePath).GetWrapOrDefault();
+                var goatImage = Plugin.TextureProvider.GetFromFile(_goatImagePath).GetWrapOrDefault();
                 if (goatImage != null)
                 {
                     using (ImRaii.PushIndent(55f))
