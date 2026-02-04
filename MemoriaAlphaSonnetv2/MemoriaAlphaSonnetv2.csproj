@@ -9,12 +9,23 @@
   </PropertyGroup>
 
 <ItemGroup>
-  <!-- Copy all Data folder contents to output directory -->
-  <!-- This includes goat.png and toc.json (and future quest files) -->
-  <Content Include="..\Data\**\*.*">
+  <!-- Copy root-level Data files (toc.json, goat.png) -->
+  <None Include="..\Data\toc.json">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    <Visible>false</Visible>
-  </Content>
+    <Link>Data\toc.json</Link>
+  </None>
+  
+  <None Include="..\Data\goat.png">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Link>Data\goat.png</Link>
+  </None>
+
+  <!-- Copy all nested Data files (quest JSONs) -->
+  <None Include="..\Data\**\*.*">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+  </None>
 </ItemGroup>
+
 
 </Project>

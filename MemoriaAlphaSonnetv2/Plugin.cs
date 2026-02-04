@@ -5,7 +5,7 @@ using System.IO;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using MemoriaAlphaSonnetv2.Windows;
-using MemoriaAlphaSonnetv2.Services;  // NEW: Import our Services namespace
+using MemoriaAlphaSonnetv2.Services;
 
 namespace MemoriaAlphaSonnetv2;
 
@@ -27,8 +27,9 @@ public sealed class Plugin : IDalamudPlugin
     private ConfigWindow ConfigWindow { get; init; }
     private MainWindow MainWindow { get; init; }
     
-    // NEW: TocService instance (initialized in constructor)
+    // Services (initialized in constructor)
     private readonly TocService _tocService;
+    private readonly QuestService _questService;  // 🆕 NEW: Add QuestService field
 
     public Plugin()
     {
@@ -48,21 +49,16 @@ public sealed class Plugin : IDalamudPlugin
             HelpMessage = "Opens Memoria Alpha quest tracker"
         });
 
-        // Tell the UI system that we want our windows to be drawn through the window system
         PluginInterface.UiBuilder.Draw += WindowSystem.Draw;
-
-        // This adds a button to the plugin installer entry of this plugin which allows
-        // toggling the display status of the configuration ui
         PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUi;
-
-        // Adds another button doing the same but for the main ui of the plugin
         PluginInterface.UiBuilder.OpenMainUi += ToggleMainUi;
 
-        // NEW: Initialize TocService (loads toc.json eagerly)
+        // Initialize services (loads data files eagerly)
         var pluginDirectory = PluginInterface.AssemblyLocation.Directory?.FullName!;
         _tocService = new TocService(ClientState, Log, pluginDirectory);
+        _questService = new QuestService(Log, pluginDirectory);  // 🆕 NEW: Initialize QuestService
         
-        // NEW: Check highest completed MSQ milestone on plugin load
+        // Log milestone detection results
         var highestMilestone = _tocService.GetHighestCompletedMilestone();
         if (highestMilestone != null)
         {
@@ -72,14 +68,15 @@ public sealed class Plugin : IDalamudPlugin
         {
             Log.Information("[TOC] No MSQ milestones completed yet (new character or stub IsQuestComplete)");
         }
+        
+        // 🆕 NEW: Log quest data load summary
+        Log.Information($"[QuestService] {_questService.Quests.Count} quests available");
 
-        // Log successful initialization
         Log.Information("Memoria Alpha v14.2.0.0 loaded successfully");
     }
 
     public void Dispose()
     {
-        // Unregister all actions to not leak anything during disposal of plugin
         PluginInterface.UiBuilder.Draw -= WindowSystem.Draw;
         PluginInterface.UiBuilder.OpenConfigUi -= ToggleConfigUi;
         PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUi;
@@ -91,13 +88,12 @@ public sealed class Plugin : IDalamudPlugin
 
         CommandManager.RemoveHandler(CommandName);
         
-        // NOTE: TocService doesn't need explicit disposal (no IDisposable resources)
-        // It only holds managed memory (List<TocEntry>) which GC handles automatically
+        // NOTE: Neither TocService nor QuestService need explicit disposal
+        // They only hold managed memory (List<T>) which GC handles automatically
     }
 
     private void OnCommand(string command, string args)
     {
-        // In response to the slash command, toggle the display status of our main ui
         MainWindow.Toggle();
     }
     

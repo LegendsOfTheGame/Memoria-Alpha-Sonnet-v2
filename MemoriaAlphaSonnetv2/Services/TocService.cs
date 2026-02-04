@@ -35,7 +35,8 @@ public class TocService
         _log = log;
         
         // Build path to toc.json (in same directory as plugin DLL)
-        _tocFilePath = Path.Combine(pluginDirectory, "toc.json");
+        _tocFilePath = Path.Combine(pluginDirectory, "Data", "toc.json");
+
         
         // EAGER LOAD: Parse TOC immediately (blocks plugin init for ~2ms)
         // WHY: TOC acts as "gateway" - must know milestones before loading quest files
