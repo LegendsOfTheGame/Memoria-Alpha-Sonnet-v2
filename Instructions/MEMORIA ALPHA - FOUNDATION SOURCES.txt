@@ -1,0 +1,129 @@
+MEMORIA ALPHA - FOUNDATION SOURCES
+Version: 2.0 (Fresh Start)
+Purpose: Define the authoritative sources for building Memoria Alpha v2
+
+=== PRIMARY FOUNDATION ===
+Source: Dalamud MemoriaAlphaSonnetv2 (Official Template)
+Repository: https://github.com/goatcorp/MemoriaAlphaSonnetv2
+Purpose: Base plugin architecture
+Status: API 14 compliant, maintained by Dalamud team
+Usage: Starting point - understand BEFORE modifying
+
+Key Components:
+- Plugin.cs: Entry point and service registration pattern
+- Configuration.cs: Settings persistence (IPluginConfiguration)
+- PluginUI.cs: ImGui window management
+- Commands: Dalamud command registration
+- Service injection: IDalamudPluginInterface usage
+
+Learning Approach:
+1. Clone MemoriaAlphaSonnetv2 as starting point
+2. Understand what each file does and WHY
+3. Modify incrementally, testing at each step
+4. Never delete template code without understanding its purpose
+
+=== REFERENCE IMPLEMENTATION ===
+Source: IsaiahCat's QuestTracker
+Repository: https://github.com/isaiahcat/QuestTracker
+Purpose: Proof-of-concept for quest filtering logic
+Status: Battle-tested, 2.5 years stable
+Usage: Study the LOGIC, not copy the CODE
+
+What to Learn From Cat:
+- Quest detection methods (QuestDataManager.cs lines 47-111)
+  - Starting city detection via specific quest IDs
+  - Grand Company detection via GC enrollment quests
+  - Why those specific quest IDs were chosen
+
+- Filtering approach (metadata-based)
+  - Start field for city-specific quests
+  - Gc field for Grand Company quests
+  - How to handle quest ID arrays (multiple variants)
+
+- Configuration patterns
+  - Caching immutable character data
+  - Initialize() pattern for non-serializable fields
+  - Save() method for persistence
+
+What NOT to Copy:
+- Loading all quests at once (slow, 6-8 second load)
+- No caching strategy (validates everything every time)
+- Nested QuestData structure (overly complex for our needs)
+- UI-coupled filtering (we want service-layer separation)
+
+How to Improve:
+- Lazy load quest data (load on first use, not plugin startup)
+- Cache detection results (starting city never changes)
+- Flatten quest structure (simpler data model)
+- Separate concerns (filtering logic in service, not UI)
+
+=== INTEGRATION PHILOSOPHY ===
+Template + Reference = Foundation
+
+Dalamud MemoriaAlphaSonnetv2 provides:
+- Proper service initialization (no conflicts with other plugins)
+- Command registration that works
+- Configuration that persists correctly
+- UI patterns that follow Dalamud standards
+
+Cat's QuestTracker provides:
+- Proven quest detection algorithms
+- Metadata-based filtering approach
+- Understanding of FFXIV quest system quirks
+
+Memoria Alpha adds:
+- Better performance (caching, lazy loading)
+- Cleaner architecture (service layer pattern)
+- Extensibility (built for 2.0 through 7.x content)
+- Learning-focused code (comments explain WHY, not just WHAT)
+
+=== DEVELOPMENT PRINCIPLES ===
+1. Start with MemoriaAlphaSonnetv2 unchanged
+   - Build it, run it, understand it
+   - Make ONE change at a time
+   - Test after each change
+
+2. Study Cat's logic, don't clone it
+   - Read the code to understand the problem
+   - Implement the solution in your own style
+   - Credit the inspiration in comments
+
+3. Build for learning AND production
+   - Code should teach the developer
+   - Code should also be maintainable
+   - Balance education with best practices
+
+4. Performance matters
+   - Don't load 10,000 quests on plugin startup
+   - Cache what doesn't change
+   - Be respectful of player's game performance
+
+=== SUCCESS CRITERIA ===
+v2 is successful when:
+- Loads instantly (< 100ms plugin initialization)
+- Plays nicely with other plugins (no service conflicts)
+- Shows 160/160 for Gridania/Twin Adder character (This is only when loading the base 2.0 quests and none else)
+- Developer understands every line of code
+- Architecture supports future expansions (HW, StB, ShB, EW, DT)
+
+=== ANTI-PATTERNS TO AVOID ===
+From v1 (Sonnet-built):
+- Building without template (reinventing the wheel)
+- Incomplete code snippets (// ... your code ...)
+- Assuming files exist without verifying
+- Fixing problems without understanding root cause
+
+From Cat's approach:
+- Load-everything-upfront architecture
+- No separation between data and presentation
+- Over-complicated nested structures
+
+=== THREAD STRUCTURE FOR V2 ===
+Thread 1: Understand MemoriaAlphaSonnetv2 template
+Thread 2: Add Configuration for character profile caching
+Thread 3: Implement quest data loading with lazy loading
+Thread 4: Add /overall command with metadata filtering
+Thread 5: Test and optimize performance
+Thread 6+: Additional features (drawers, windows, etc.)
+
+One feature per thread. Complete, working, tested.

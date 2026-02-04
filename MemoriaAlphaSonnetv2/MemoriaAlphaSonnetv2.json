@@ -1,0 +1,17 @@
+{
+  "Author": "LegendsOfTheGame",
+  "Name": "Memoria Alpha",
+  "Punchline": "Track your FFXIV quest progress with style.",
+  "Description": "FFXIV quest tracker with MSQ milestone detection and lazy-loaded quest data. Built for performance with smart caching.",
+  "Tags": [
+    "quests",
+    "tracker",
+    "msq",
+    "progression",
+    "utility"
+  ],
+  "InternalName": "MemoriaAlphaSonnetv2",
+  "AssemblyVersion": "14.2.0.0",
+  "ApplicableVersion": "any",
+  "DalamudApiLevel": 14
+}

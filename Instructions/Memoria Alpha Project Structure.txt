@@ -1,0 +1,52 @@
+# Memoria Alpha Project Structure
+
+## Repository Layout
+MemoriaAlpha/
+├── MemoriaAlpha/ # Main plugin project
+│ ├── Plugin.cs # Entry point, service registration
+│ ├── Configuration.cs # User settings
+│ ├── MemoriaAlpha.csproj # Project file (Version: 14.2.0.0)
+│ ├── MemoriaAlpha.json # Dalamud manifest
+│ ├── Data/
+│ │ └── Quests/
+│ │ ├── 2-ARR/
+│ │ │ ├── 2.0/
+│ │ │ │ ├── 1-msq.json
+│ │ │ │ ├── 2-NewEra.json
+│ │ │ │ ├── 3-Feature.json
+│ │ │ │ ├── 4-Beasts.json
+│ │ │ │ ├── 5-Class.json
+│ │ │ │ ├── 6-Seasonal.json
+│ │ │ │ └── 7-Other.json
+│ │ │ ├── 2.1/ ... 2.5/
+│ │ ├── 3-HW/ ... 7-DT/
+│ ├── Models/ # Data structures
+│ │ ├── Quest.cs
+│ │ ├── QuestDrawer.cs
+│ │ └── NewsEvent.cs
+│ ├── Services/ # Business logic
+│ │ ├── QuestRepository.cs
+│ │ └── NewsRepository.cs
+│ ├── UI/ # ImGui interfaces
+│ │ ├── MainWindow.cs
+│ │ └── QuestOverviewWindow.cs
+├── README.md
+└── LICENSE (AGPL-3.0)
+
+text
+
+## Development Workflow
+1. **Edit** in VS Code (fast, responsive)
+2. **Build** in Visual Studio 2022 (proper .NET SDK)
+3. **Commit** via GitHub Desktop (version control)
+
+## Data Architecture
+- **Drawers**: Thematic quest groupings (MSQ, Features, etc.)
+- **Bands**: Expansion-level organization
+- **Patches**: Chronological release groupings
+
+## Key Design Decisions
+- JSON for quest data (human-readable, version-controllable)
+- Service pattern for data access
+- ImGui for UI (Dalamud standard)
+- AGPL-3.0 license (copyleft for modifications)

@@ -1,0 +1,23 @@
+# Memoria Alpha Prime Directive
+
+## Purpose
+This Space exists to build Memoria Alpha from foundation to completion while progressively developing C# and plugin development skills.
+
+## Core Principles
+1. **Learn by Building**: Every feature teaches a skill
+2. **Isolation**: This Space cannot contaminate other projects
+3. **One Thread, One Task**: Complete before moving forward
+4. **Progressive Complexity**: Beginner → Competent → Confident
+5. **Working Code First**: Ship functional, then optimize
+
+## Skill Progression Path
+- **Beginner** (Weeks 1-2): Project structure, basic C# syntax, simple data models
+- **Developing** (Weeks 3-4): LINQ queries, JSON serialization, plugin lifecycle
+- **Competent** (Weeks 5-8): ImGui UI patterns, service injection, event handling
+- **Confident** (Weeks 9-12): Performance optimization, complex state management, API integration
+
+## Success Metrics
+- Code compiles without errors
+- Plugin loads in game
+- Features work as specified
+- Developer understands WHY it works
