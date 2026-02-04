@@ -2,5 +2,12 @@
   "expansion": "2.0",
   "drawer": "2-NewEra",
   "title": "Seventh Umbral Era (ARR) Chronicles of a New Era Quests (2.0)",
-  "quests": []
+  "quests": [
+    {  "Title": "A Recurring Problem", "Id": [ 66583 ], "Area": "The Waking Sands", "Level": 50  },
+    {  "Title": "Ifrit Bleeds, We Can Kill It", "Id": [ 66584 ], "Area": "The Waking Sands", "Level": 50  },
+    {  "Title": "In for Garuda Awakening", "Id": [ 66693 ], "Area": "The Waking Sands", "Level": 50  },
+    {  "Title": "In a Titan Spot", "Id": [ 66694 ], "Area": "The Waking Sands", "Level": 50  },
+    {  "Title": "Primal Awakening", "Id": [ 66695 ], "Area": "The Waking Sands", "Level": 50  },
+    {  "Title": "Alisaie's Pledge", "Id": [ 66696 ], "Area": "The Waking Sands", "Level": 50  }
+  ]
 }

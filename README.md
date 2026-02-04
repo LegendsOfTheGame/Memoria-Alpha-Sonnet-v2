@@ -1,17 +1,24 @@
-# Memoria Alpha v2
-
-FFXIV Main Scenario Quest progress tracker for Dalamud.
-
-Version: 14.2.0.1
-
-## What It Does
-
-Tracks your MSQ completion across all FFXIV expansions (ARR through Dawntrail).
-
 ## Current Status
 
-- ARR 2.0 MSQ complete (290 quests)
-- Additional content in progress
+**Version:** 14.2.0.2  
+**Status:** ARR 2.0 MSQ + NewEra Complete
+
+### Quest Coverage
+- ✅ **290 Main Scenario Quests** (2.0) - Complete ARR storyline
+- ✅ **6 Chronicles of a New Era Quests** (2.0)
+  - Hard Mode Primals: Ifrit, Garuda, Titan
+  - Binding Coil of Bahamut: Turns 1-5 unlock
+- ⏳ Feature quests (planned)
+- ⏳ Beast tribe quests (planned)
+- ⏳ Class/Job quests (planned)
+- ⏳ Seasonal events (planned)
+
+### Technical Details
+- **Total 2.0 Quests:** 296
+- **Drawer Types Loaded:** 2 (MSQ, NewEra)
+- **Load Performance:** ~11ms for quest service initialization
+- **Data Architecture:** 36 patch folders ready (2.0 through 7.5)
+
 
 ## Installation
 

@@ -1,17 +1,11 @@
 {
   "Author": "LegendsOfTheGame",
   "Name": "Memoria Alpha",
-  "Punchline": "Track your FFXIV quest progress with style.",
-  "Description": "FFXIV quest tracker with MSQ milestone detection and lazy-loaded quest data. Built for performance with smart caching.",
-  "Tags": [
-    "quests",
-    "tracker",
-    "msq",
-    "progression",
-    "utility"
-  ],
-  "InternalName": "MemoriaAlphaSonnetv2",
-  "AssemblyVersion": "14.2.0.0",
+  "Punchline": "Track your FFXIV quest progress across all expansions",
+  "Description": "A comprehensive quest tracking plugin for Final Fantasy XIV, covering all Main Scenario Quests and side content from A Realm Reborn through Dawntrail.",
+  "InternalName": "MemoriaAlpha",
+  "AssemblyVersion": "14.2.0.2",
+  "RepoUrl": "https://github.com/LegendsOfTheGame/Memoria-Alpha-Sonnet-v2",
   "ApplicableVersion": "any",
   "DalamudApiLevel": 14
 }
