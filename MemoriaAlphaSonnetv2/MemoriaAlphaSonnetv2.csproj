@@ -1,12 +1,15 @@
 <Project Sdk="Dalamud.NET.Sdk/14.0.1">
-  <PropertyGroup>
-    <Version>14.2.0.0</Version>
-    <PackageProjectUrl>https://github.com/LegendsOfTheGame/Memoria-Alpha-Sonnet-v2</PackageProjectUrl>
-    <Punchline>Track your FFXIV quest progress with style.</Punchline>
-    <Description>FFXIV quest tracker with MSQ milestone detection and lazy-loaded quest data.</Description>
-    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+<PropertyGroup>
+  <Version>14.2.0.2</Version>
+  <AssemblyVersion>14.2.0.2</AssemblyVersion>
+  <FileVersion>14.2.0.2</FileVersion>
+  <PackageProjectUrl>https://github.com/LegendsOfTheGame/Memoria-Alpha-Sonnet-v2</PackageProjectUrl>
+  <Punchline>Track your FFXIV quest progress with style.</Punchline>
+  <Description>FFXIV quest tracker with MSQ milestone detection and lazy-loaded quest data.</Description>
+  <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+  <IsPackable>false</IsPackable>
+</PropertyGroup>
+
 
 <ItemGroup>
   <!-- Copy root-level Data files (toc.json, goat.png) -->

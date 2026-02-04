@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using Dalamud.Plugin.Services;
 using MemoriaAlphaSonnetv2.Models;
+using FFXIVClientStructs.FFXIV.Client.Game; 
 
 namespace MemoriaAlphaSonnetv2.Services;
 
@@ -68,22 +69,25 @@ private void LoadQuestData()
             return;
         }
 
-        // Find all 1-msq.json files recursively
-        var msqFiles = Directory.GetFiles(_dataDirectory, "1-msq.json", SearchOption.AllDirectories);
+        // Find all drawer files (1-msq.json, 2-NewEra.json, etc.) recursively
+        var drawerFiles = Directory.GetFiles(_dataDirectory, "*-*.json", SearchOption.AllDirectories)
+        .Where(f => !f.EndsWith("toc.json")) // Exclude TOC file
+        .OrderBy(f => f) // Load in consistent order
+        .ToArray();
 
-        if (msqFiles.Length == 0)
+        if (drawerFiles.Length == 0)
         {
-            _log.Warning("[QuestService] No 1-msq.json files found in Data/ directory");
-            return;
-        }
+        _log.Warning("[QuestService] No drawer files found in Data/ directory");
+        return;
+        }       
 
-        _log.Information($"[QuestService] Found {msqFiles.Length} MSQ files to load");
-
+        _log.Information($"[QuestService] Found {drawerFiles.Length} drawer files to load");
+        
         // Load each file
         int totalQuestsLoaded = 0;
         FilesLoaded = 0;
 
-        foreach (var filePath in msqFiles)
+        foreach (var filePath in drawerFiles)
         {
             try
             {
@@ -108,10 +112,20 @@ private void LoadQuestData()
                     continue;
                 }
 
-                // Add to master list
-                _quests.AddRange(questFile.Quests);
-                totalQuestsLoaded += questFile.Quests.Count;
-                FilesLoaded++;
+// Set expansion/patch/drawer metadata on each quest
+foreach (var quest in questFile.Quests)
+{
+    quest.Expansion = questFile.Expansion;      // From JSON (e.g., "2.0")
+    quest.Patch = patchInfo ?? string.Empty;    // From path (e.g., "2.x\2.0")
+    quest.Drawer = questFile.Drawer;            // From JSON (e.g., "1-msq")
+}
+
+
+// Add to master list
+_quests.AddRange(questFile.Quests);
+totalQuestsLoaded += questFile.Quests.Count;
+FilesLoaded++;
+
 
                 _log.Verbose($"[QuestService] Loaded {questFile.Quests.Count} quests from {patchInfo}/1-msq.json");
             }
@@ -125,7 +139,23 @@ private void LoadQuestData()
         LoadTimeMs = stopwatch.ElapsedMilliseconds;
 
         // Log summary
-        _log.Information($"[QuestService] Loaded {totalQuestsLoaded} quests from {FilesLoaded}/{msqFiles.Length} files in {LoadTimeMs}ms");
+        _log.Information($"[QuestService] Loaded {totalQuestsLoaded} quests from {FilesLoaded} files in {LoadTimeMs}ms");
+        // 🐛 DEBUG: Verify quest breakdown by expansion
+var expansionCounts = _quests.GroupBy(q => q.Expansion).ToDictionary(g => g.Key, g => g.Count());
+foreach (var exp in expansionCounts)
+{
+    _log.Information($"[QuestService] Expansion '{exp.Key}': {exp.Value} quests");
+}
+
+// 🐛 DEBUG: Show first and last 3 quests
+if (_quests.Count > 0)
+{
+ _log.Information($"[QuestService] First quest: {_quests.First().Name} (ID: {_quests.First().Id})");
+_log.Information($"[QuestService] Last quest: {_quests.Last().Name} (ID: {_quests.Last().Id})");
+
+}
+
+
         
         if (_quests.Count > 0)
         {
@@ -172,4 +202,27 @@ private void LoadQuestData()
         return _quests.GroupBy(q => q.Expansion)
                       .ToDictionary(g => g.Key, g => g.Count());
     }
+/// <summary>
+/// Detects player's starting city by checking level 1 completion quests
+/// </summary>
+public string DetectStartingCity()
+{
+    if (QuestManager.IsQuestComplete(65575)) return "Gridania";
+    if (QuestManager.IsQuestComplete(65643)) return "Limsa Lominsa";
+    if (QuestManager.IsQuestComplete(66130)) return "Ul'dah";
+    return string.Empty;
+}
+
+/// <summary>
+/// Detects player's Grand Company
+/// </summary>
+public string DetectGrandCompany()
+{
+    if (QuestManager.IsQuestComplete(66216)) return "Twin Adder";
+    if (QuestManager.IsQuestComplete(66217)) return "Maelstrom";
+    if (QuestManager.IsQuestComplete(66218)) return "Immortal Flames";
+    return string.Empty;
+}
+
+
 }

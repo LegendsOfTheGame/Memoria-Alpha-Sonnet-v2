@@ -74,6 +74,12 @@ public class Quest
     public string Patch { get; set; } = string.Empty;
 
     /// <summary>
+    /// Drawer identifier (e.g., "1-msq", "2-NewEra")
+    /// </summary>
+    [JsonIgnore]
+    public string Drawer { get; set; } = string.Empty;  // 🆕 ADD THIS
+
+    /// <summary>
     /// For debugging - shows key quest info in logs
     /// </summary>
     public override string ToString()
@@ -81,4 +87,10 @@ public class Quest
         var idList = IdArray.Count > 1 ? $"[{string.Join(", ", IdArray)}]" : IdArray.FirstOrDefault().ToString();
         return $"{Title} (Lv{Level}, {Area}, ID: {idList})";
     }
+    
+/// <summary>
+/// Grand Company restriction (e.g., "Twin Adder", "Maelstrom", "Immortal Flames")
+/// </summary>
+[JsonPropertyName("Gc")]
+public string Gc { get; set; } = string.Empty;  // 🆕 ADD THIS
 }
